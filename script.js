@@ -11,17 +11,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const expenseAmountInput = document.getElementById('expense-amount');
     const expenseCategoryInput = document.getElementById('expense-category');
     const categorySuggestions = document.getElementById('category-suggestions');
-    const addExpenseBtn = document.getElementById('add-expense-btn'); // New button
+    const customDateCheckbox = document.getElementById('custom-date-checkbox');
+    const expenseDateInput = document.getElementById('expense-date');
+    const addExpenseBtn = document.getElementById('add-expense-btn');
     const expenseList = document.getElementById('expense-list');
     const expenseSummary = document.getElementById('expense-summary');
     const display = document.getElementById('display');
     const buttons = document.querySelector('.buttons');
     const historyList = document.getElementById('history-list');
     const clearHistoryBtn = document.getElementById('clear-history');
+    const filterTabs = document.querySelector('.filter-tabs');
 
     // --- STATE ---
     let history = [];
     let expenses = [];
+    let activeFilter = 'all';
     let displayValue = '0';
 
     // --- THEME LOGIC ---
@@ -52,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- HISTORY LOGIC ---
+    // ... (history functions remain the same)
     function updateHistoryView() {
         historyList.innerHTML = history.map(item => `<li>${item}</li>`).join('');
         historyList.scrollTop = historyList.scrollHeight;
@@ -74,77 +79,117 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- EXPENSE TRACKER LOGIC ---
-    function renderExpenses() {
+    function renderExpenses(expenseArray) {
         expenseList.innerHTML = '';
-        for (const expense of expenses) {
+        expenseArray.forEach((expense, index) => {
             const li = document.createElement('li');
             const descSpan = document.createElement('span');
             descSpan.textContent = `${expense.desc} (${expense.category})`;
+            const dateString = expense.date.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'expense-date';
+            dateSpan.textContent = dateString;
             const amountSpan = document.createElement('span');
             amountSpan.textContent = `$${expense.amount.toFixed(2)}`;
-            li.appendChild(descSpan);
-            li.appendChild(amountSpan);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = 'X';
+            deleteBtn.dataset.originalIndex = expenses.indexOf(expense); // Use original index for deletion
+            const leftDiv = document.createElement('div');
+            leftDiv.className = 'expense-item-left';
+            leftDiv.appendChild(descSpan);
+            leftDiv.appendChild(dateSpan);
+            const rightDiv = document.createElement('div');
+            rightDiv.className = 'expense-item-right';
+            rightDiv.appendChild(amountSpan);
+            rightDiv.appendChild(deleteBtn);
+            li.appendChild(leftDiv);
+            li.appendChild(rightDiv);
             expenseList.appendChild(li);
-        }
+        });
     }
-
-    function renderSummary() {
+    function renderSummary(expenseArray) {
         expenseSummary.innerHTML = '';
-        if (expenses.length === 0) return;
-
-        const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-
-        const categories = expenses.reduce((acc, exp) => {
-            if (!acc[exp.category]) {
-                acc[exp.category] = 0;
-            }
+        if (expenseArray.length === 0) return;
+        const total = expenseArray.reduce((sum, exp) => sum + exp.amount, 0);
+        const categories = expenseArray.reduce((acc, exp) => {
+            if (!acc[exp.category]) acc[exp.category] = 0;
             acc[exp.category] += exp.amount;
             return acc;
         }, {});
-
         let summaryHTML = '<h3>Summary</h3>';
         for (const category in categories) {
             const amount = categories[category];
-            const percentage = (amount / total * 100).toFixed(1);
-            summaryHTML += `
-                <div class="summary-item">
-                    <span>${category}</span>
-                    <span>$${amount.toFixed(2)} (${percentage}%)</span>
-                </div>
-            `;
+            const percentage = total > 0 ? (amount / total * 100).toFixed(1) : 0;
+            summaryHTML += `<div class="summary-item"><span>${category}</span><span>$${amount.toFixed(2)} (${percentage}%)</span></div>`;
         }
-        summaryHTML += `
-            <div class="summary-item total">
-                <span>Total</span>
-                <span>$${total.toFixed(2)}</span>
-            </div>
-        `;
+        summaryHTML += `<div class="summary-item total"><span>Total</span><span>$${total.toFixed(2)}</span></div>`;
         expenseSummary.innerHTML = summaryHTML;
     }
-    function addExpense(desc, amount, category) {
-        expenses.push({ desc, amount, category });
-        localStorage.setItem('expenses', JSON.stringify(expenses));
-        renderExpenses();
-        renderSummary();
+    function updateExpenseView() {
+        const now = new Date();
+        let filteredExpenses = expenses;
+
+        if (activeFilter === 'weekly') {
+            const oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+            filteredExpenses = expenses.filter(exp => exp.date >= oneWeekAgo);
+        } else if (activeFilter === 'monthly') {
+            filteredExpenses = expenses.filter(exp => exp.date.getMonth() === now.getMonth() && exp.date.getFullYear() === now.getFullYear());
+        } else if (activeFilter === 'yearly') {
+            filteredExpenses = expenses.filter(exp => exp.date.getFullYear() === now.getFullYear());
+        }
+
+        renderExpenses(filteredExpenses);
+        renderSummary(filteredExpenses);
     }
-    // Changed from form.submit to button.click
+    function addExpense(desc, amount, category, date) {
+        expenses.push({ desc, amount, category, date });
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        updateExpenseView();
+    }
     addExpenseBtn.addEventListener('click', () => {
         const desc = expenseDescInput.value;
         const amount = parseFloat(expenseAmountInput.value);
         const category = expenseCategoryInput.value;
+        let date = new Date();
+        if (customDateCheckbox.checked && expenseDateInput.value) {
+            date = new Date(expenseDateInput.value);
+        }
         if (desc && !isNaN(amount) && category) {
-            addExpense(desc, amount, category);
+            addExpense(desc, amount, category, date);
             expenseForm.reset();
+            customDateCheckbox.checked = false;
+            expenseDateInput.classList.add('hidden');
+        }
+    });
+    expenseList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            const index = parseInt(e.target.dataset.originalIndex, 10);
+            expenses.splice(index, 1);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            updateExpenseView();
         }
     });
     const savedExpenses = localStorage.getItem('expenses');
     if (savedExpenses) {
         expenses = JSON.parse(savedExpenses);
-        renderExpenses();
-        renderSummary();
+        expenses.forEach(exp => exp.date = new Date(exp.date));
+        updateExpenseView();
     }
+    customDateCheckbox.addEventListener('change', () => {
+        expenseDateInput.classList.toggle('hidden', !customDateCheckbox.checked);
+    });
+    filterTabs.addEventListener('click', (e) => {
+        if (e.target.classList.contains('filter-btn')) {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            e.target.classList.add('active');
+            activeFilter = e.target.dataset.filter;
+            updateExpenseView();
+        }
+    });
 
-    // Autocomplete logic
+    // --- Autocomplete Logic ---
+    // ... (autocomplete logic remains the same)
     expenseCategoryInput.addEventListener('input', () => {
         const inputText = expenseCategoryInput.value.toLowerCase();
         if (!inputText) {
@@ -153,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const uniqueCategories = [...new Set(expenses.map(e => e.category))];
         const suggestions = uniqueCategories.filter(cat => cat.toLowerCase().includes(inputText));
-
         categorySuggestions.innerHTML = '';
         if (suggestions.length > 0) {
             suggestions.forEach(suggestion => {
@@ -170,16 +214,14 @@ document.addEventListener('DOMContentLoaded', () => {
             categorySuggestions.style.display = 'none';
         }
     });
-
-    // Hide suggestions when clicking away
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.autocomplete-wrapper')) {
             categorySuggestions.style.display = 'none';
         }
     });
 
-
     // --- CALCULATOR LOGIC ---
+    // ... (calculator logic remains the same)
     function updateDisplay() {
         display.textContent = displayValue;
     }
@@ -189,16 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const button = event.target.closest('button');
         if (!button) return;
         const { value } = button.dataset;
-
-        if (value === '=') {
-            calculate();
-        } else if (value === 'C') {
-            resetCalculator();
-        } else if (value === 'DEL') {
-            deleteLastChar();
-        } else {
-            appendToDisplay(value);
-        }
+        if (value === '=') calculate();
+        else if (value === 'C') resetCalculator();
+        else if (value === 'DEL') deleteLastChar();
+        else appendToDisplay(value);
         updateDisplay();
     });
 

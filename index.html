@@ -75,16 +75,32 @@
             <div class="expense-container">
                 <h2>Add New Expense</h2>
                 <form id="expense-form">
-                    <div class="autocomplete-wrapper">
-                        <input type="text" id="expense-category" placeholder="Category" required autocomplete="off">
-                        <div id="category-suggestions" class="suggestions-container"></div>
+                    <div class="form-row">
+                        <input type="text" id="expense-desc" placeholder="Expense Description" required>
+                        <input type="number" id="expense-amount" placeholder="Amount" required step="0.01">
+                        <div class="autocomplete-wrapper">
+                            <input type="text" id="expense-category" placeholder="Category" required autocomplete="off">
+                            <div id="category-suggestions" class="suggestions-container"></div>
+                        </div>
                     </div>
-                    <input type="text" id="expense-desc" placeholder="Expense Description" required>
-                    <input type="number" id="expense-amount" placeholder="Amount" required>
-                    <button type="button" id="add-expense-btn">Add Expense</button>
+                    <div class="form-row">
+                        <label class="custom-date-label">
+                            <input type="checkbox" id="custom-date-checkbox"> Set custom date
+                        </label>
+                        <input type="datetime-local" id="expense-date" class="hidden">
+                    </div>
+                    <div class="form-row">
+                        <button type="button" id="add-expense-btn">Add Expense</button>
+                    </div>
                 </form>
                 <div class="expense-list-container">
                     <h2>Expenses</h2>
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="yearly">This Year</button>
+                    <button class="filter-btn" data-filter="monthly">This Month</button>
+                    <button class="filter-btn" data-filter="weekly">This Week</button>
+                </div>
                     <ul id="expense-list">
                         <!-- Expenses will be listed here -->
                     </ul>
