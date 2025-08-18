@@ -7,83 +7,94 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="mode-switcher">
-        <button id="calc-mode-btn" class="mode-btn active">Calculator</button>
-        <button id="expense-mode-btn" class="mode-btn">Expense Tracker</button>
-    </div>
+    <div class="main-app-wrapper">
+        <header>
+            <div class="mode-switcher">
+                <button id="calc-mode-btn" class="mode-btn active">Calculator</button>
+                <button id="expense-mode-btn" class="mode-btn">Expense Tracker</button>
+            </div>
+        </header>
 
-    <div id="calculator-view" class="view active">
-        <div class="app-container">
-            <div class="calculator-wrapper">
-                <div class="theme-switcher">
-                    <label for="theme-toggle" class="toggle-label">
-                        <input type="checkbox" id="theme-toggle">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="calculator">
-                    <div class="display" id="display">0</div>
-                    <div class="buttons">
-                        <!-- Scientific Rows -->
-                        <button class="btn operator" data-value="sin(">sin</button>
-                        <button class="btn operator" data-value="cos(">cos</button>
-                        <button class="btn operator" data-value="tan(">tan</button>
-                        <button class="btn operator" data-value="^">^</button>
-                        <button class="btn operator" data-value="log(">log</button>
-                        <button class="btn operator" data-value="ln(">ln</button>
-                        <button class="btn operator" data-value="exp(">exp</button>
-                        <button class="btn operator" data-value="Math.E">e</button>
-                        <!-- Top Row -->
-                        <button class="btn operator" data-value="(">(</button>
-                        <button class="btn operator" data-value=")">)</button>
-                        <button class="btn operator" data-value="DEL">DEL</button>
-                        <button class="btn operator" data-value="C">C</button>
-                        <!-- Numpad -->
-                        <button class="btn" data-value="7">7</button>
-                        <button class="btn" data-value="8">8</button>
-                        <button class="btn" data-value="9">9</button>
-                        <button class="btn operator" data-value="/">/</button>
-                        <button class="btn" data-value="4">4</button>
-                        <button class="btn" data-value="5">5</button>
-                        <button class="btn" data-value="6">6</button>
-                        <button class="btn operator" data-value="*">*</button>
-                        <button class="btn" data-value="1">1</button>
-                        <button class="btn" data-value="2">2</button>
-                        <button class="btn" data-value="3">3</button>
-                        <button class="btn operator" data-value="-">-</button>
-                        <button class="btn" data-value="0">0</button>
-                        <button class="btn" data-value=".">.</button>
-                        <button class="btn operator" data-value="=">=</button>
-                        <button class="btn operator" data-value="+">+</button>
+        <div id="calculator-view" class="view active">
+            <div class="app-container">
+                <div class="calculator-wrapper">
+                    <div class="theme-switcher">
+                        <span>Light</span>
+                        <label for="theme-toggle" class="toggle-label">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <span>Dark</span>
+                    </div>
+                    <div class="calculator">
+                        <div class="display" id="display">0</div>
+                        <div class="buttons">
+                            <!-- Scientific Rows -->
+                            <button class="btn operator" data-value="sin(">sin</button>
+                            <button class="btn operator" data-value="cos(">cos</button>
+                            <button class="btn operator" data-value="tan(">tan</button>
+                            <button class="btn operator" data-value="^">^</button>
+                            <button class="btn operator" data-value="log(">log</button>
+                            <button class="btn operator" data-value="ln(">ln</button>
+                            <button class="btn operator" data-value="exp(">exp</button>
+                            <button class="btn operator" data-value="Math.E">e</button>
+                            <!-- Top Row -->
+                            <button class="btn operator" data-value="(">(</button>
+                            <button class="btn operator" data-value=")">)</button>
+                            <button class="btn operator" data-value="DEL">DEL</button>
+                            <button class="btn operator" data-value="C">C</button>
+                            <!-- Numpad -->
+                            <button class="btn" data-value="7">7</button>
+                            <button class="btn" data-value="8">8</button>
+                            <button class="btn" data-value="9">9</button>
+                            <button class="btn operator" data-value="/">/</button>
+                            <button class="btn" data-value="4">4</button>
+                            <button class="btn" data-value="5">5</button>
+                            <button class="btn" data-value="6">6</button>
+                            <button class="btn operator" data-value="*">*</button>
+                            <button class="btn" data-value="1">1</button>
+                            <button class="btn" data-value="2">2</button>
+                            <button class="btn" data-value="3">3</button>
+                            <button class="btn operator" data-value="-">-</button>
+                            <button class="btn" data-value="0">0</button>
+                            <button class="btn" data-value=".">.</button>
+                            <button class="btn operator" data-value="=">=</button>
+                            <button class="btn operator" data-value="+">+</button>
+                        </div>
                     </div>
                 </div>
+                <div class="history-panel">
+                    <h3>History</h3>
+                    <ul id="history-list"></ul>
+                    <button id="clear-history">Clear History</button>
+                </div>
             </div>
-            <div class="history-panel">
-                <h3>History</h3>
-                <ul id="history-list"></ul>
-                <button id="clear-history">Clear History</button>
+        </div>
+
+        <div id="expense-tracker-view" class="view">
+            <div class="expense-container">
+                <h2>Add New Expense</h2>
+                <form id="expense-form">
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="expense-category" placeholder="Category" required autocomplete="off">
+                        <div id="category-suggestions" class="suggestions-container"></div>
+                    </div>
+                    <input type="text" id="expense-desc" placeholder="Expense Description" required>
+                    <input type="number" id="expense-amount" placeholder="Amount" required>
+                    <button type="button" id="add-expense-btn">Add Expense</button>
+                </form>
+                <div class="expense-list-container">
+                    <h2>Expenses</h2>
+                    <ul id="expense-list">
+                        <!-- Expenses will be listed here -->
+                    </ul>
+                </div>
+                <div id="expense-summary" class="expense-summary-container">
+                    <!-- Summary will be rendered here -->
+                </div>
             </div>
         </div>
     </div>
-
-    <div id="expense-tracker-view" class="view">
-        <div class="expense-container">
-            <h2>Add New Expense</h2>
-            <form id="expense-form">
-                <input type="text" id="expense-desc" placeholder="Expense Description" required>
-                <input type="number" id="expense-amount" placeholder="Amount" required>
-                <input type="text" id="expense-category" placeholder="Category" required>
-                <button type="button" id="add-expense-btn">Add Expense</button>
-            </form>
-            <div class="expense-list-container">
-                <h2>Expenses</h2>
-                <ul id="expense-list">
-                    <!-- Expenses will be listed here -->
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>

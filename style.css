@@ -33,14 +33,18 @@ body.dark-mode {
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
     background-color: var(--bg-color);
     font-family: sans-serif;
     transition: background-color 0.3s ease;
+}
+
+.main-app-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    min-height: 100vh;
 }
 
 .calculator-wrapper {
@@ -51,6 +55,11 @@ body {
 
 .theme-switcher {
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--btn-color);
 }
 
 .toggle-label {
@@ -226,10 +235,16 @@ input:checked + .slider:before {
     }
 }
 
-/* --- MODE SWITCHER --- */
+/* --- HEADER & MODE SWITCHER --- */
+header {
+    background-color: var(--calculator-bg);
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%;
+}
 .mode-switcher {
     text-align: center;
-    margin-bottom: 20px;
+    width: 100%;
 }
 .mode-btn {
     padding: 10px 20px;
@@ -307,4 +322,56 @@ input:checked + .slider:before {
 }
 #expense-list li span:first-child {
     font-weight: bold;
+}
+
+/* --- AUTOCOMPLETE --- */
+.autocomplete-wrapper {
+    position: relative;
+    display: inline-block;
+}
+.suggestions-container {
+    display: none; /* Hidden by default */
+    position: absolute;
+    border: 1px solid var(--calculator-border);
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--calculator-bg);
+}
+.suggestions-container div {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--calculator-border);
+}
+.suggestions-container div:hover {
+    background-color: var(--btn-hover-bg);
+}
+
+/* --- EXPENSE SUMMARY --- */
+.expense-summary-container {
+    width: 400px;
+    background-color: var(--calculator-bg);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--calculator-border);
+    margin-top: 20px;
+}
+.expense-summary-container h3 {
+    margin-top: 0;
+    text-align: center;
+    border-bottom: 1px solid var(--calculator-border);
+    padding-bottom: 10px;
+}
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+.summary-item.total {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 10px;
+    border-top: 2px solid var(--btn-color);
 }

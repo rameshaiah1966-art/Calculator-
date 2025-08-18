@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const expenseDescInput = document.getElementById('expense-desc');
     const expenseAmountInput = document.getElementById('expense-amount');
     const expenseCategoryInput = document.getElementById('expense-category');
+    const categorySuggestions = document.getElementById('category-suggestions');
     const addExpenseBtn = document.getElementById('add-expense-btn'); // New button
     const expenseList = document.getElementById('expense-list');
+    const expenseSummary = document.getElementById('expense-summary');
     const display = document.getElementById('display');
     const buttons = document.querySelector('.buttons');
     const historyList = document.getElementById('history-list');
@@ -85,10 +87,45 @@ document.addEventListener('DOMContentLoaded', () => {
             expenseList.appendChild(li);
         }
     }
+
+    function renderSummary() {
+        expenseSummary.innerHTML = '';
+        if (expenses.length === 0) return;
+
+        const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+
+        const categories = expenses.reduce((acc, exp) => {
+            if (!acc[exp.category]) {
+                acc[exp.category] = 0;
+            }
+            acc[exp.category] += exp.amount;
+            return acc;
+        }, {});
+
+        let summaryHTML = '<h3>Summary</h3>';
+        for (const category in categories) {
+            const amount = categories[category];
+            const percentage = (amount / total * 100).toFixed(1);
+            summaryHTML += `
+                <div class="summary-item">
+                    <span>${category}</span>
+                    <span>$${amount.toFixed(2)} (${percentage}%)</span>
+                </div>
+            `;
+        }
+        summaryHTML += `
+            <div class="summary-item total">
+                <span>Total</span>
+                <span>$${total.toFixed(2)}</span>
+            </div>
+        `;
+        expenseSummary.innerHTML = summaryHTML;
+    }
     function addExpense(desc, amount, category) {
         expenses.push({ desc, amount, category });
         localStorage.setItem('expenses', JSON.stringify(expenses));
         renderExpenses();
+        renderSummary();
     }
     // Changed from form.submit to button.click
     addExpenseBtn.addEventListener('click', () => {
@@ -104,7 +141,43 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedExpenses) {
         expenses = JSON.parse(savedExpenses);
         renderExpenses();
+        renderSummary();
     }
+
+    // Autocomplete logic
+    expenseCategoryInput.addEventListener('input', () => {
+        const inputText = expenseCategoryInput.value.toLowerCase();
+        if (!inputText) {
+            categorySuggestions.style.display = 'none';
+            return;
+        }
+        const uniqueCategories = [...new Set(expenses.map(e => e.category))];
+        const suggestions = uniqueCategories.filter(cat => cat.toLowerCase().includes(inputText));
+
+        categorySuggestions.innerHTML = '';
+        if (suggestions.length > 0) {
+            suggestions.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.textContent = suggestion;
+                div.addEventListener('click', () => {
+                    expenseCategoryInput.value = suggestion;
+                    categorySuggestions.style.display = 'none';
+                });
+                categorySuggestions.appendChild(div);
+            });
+            categorySuggestions.style.display = 'block';
+        } else {
+            categorySuggestions.style.display = 'none';
+        }
+    });
+
+    // Hide suggestions when clicking away
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.autocomplete-wrapper')) {
+            categorySuggestions.style.display = 'none';
+        }
+    });
+
 
     // --- CALCULATOR LOGIC ---
     function updateDisplay() {
