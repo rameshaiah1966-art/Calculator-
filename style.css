@@ -158,10 +158,6 @@ input:checked + .slider:before {
     background-color: var(--operator-active-bg);
 }
 
-.btn-zero {
-    grid-column: span 2;
-}
-
 .app-container {
     display: flex;
     gap: 40px;
@@ -228,4 +224,87 @@ input:checked + .slider:before {
         margin-top: 20px;
         height: 200px;
     }
+}
+
+/* --- MODE SWITCHER --- */
+.mode-switcher {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.mode-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: 1px solid var(--calculator-border);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+}
+.mode-btn.active {
+    background-color: var(--operator-bg);
+    color: var(--operator-color);
+}
+.mode-btn:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.mode-btn:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* --- VIEW MANAGEMENT --- */
+.view {
+    display: none;
+}
+.view.active {
+    display: block;
+}
+
+/* --- EXPENSE TRACKER --- */
+.expense-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: var(--btn-color);
+}
+#expense-form {
+    display: flex;
+    gap: 10px;
+}
+#expense-form input {
+    padding: 10px;
+    border: 1px solid var(--calculator-border);
+    border-radius: 5px;
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+}
+#expense-form button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--operator-bg);
+    color: var(--operator-color);
+    cursor: pointer;
+}
+.expense-list-container {
+    width: 400px;
+    background-color: var(--calculator-bg);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--calculator-border);
+}
+#expense-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#expense-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid var(--calculator-border);
+}
+#expense-list li span:first-child {
+    font-weight: bold;
 }
