@@ -45,6 +45,16 @@ body {
     align-items: center;
     padding-top: 20px;
     min-height: 100vh;
+    transition: all 0.3s ease;
+}
+.main-app-wrapper.mobile-view {
+    max-width: 375px;
+    height: 667px;
+    border: 10px solid #333;
+    border-radius: 20px;
+    padding: 20px;
+    overflow: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 .calculator-wrapper {
@@ -238,13 +248,24 @@ input:checked + .slider:before {
 /* --- HEADER & MODE SWITCHER --- */
 header {
     background-color: var(--calculator-bg);
-    padding: 10px;
+    padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
 }
 .mode-switcher {
     text-align: center;
-    width: 100%;
+}
+#viewport-btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--calculator-border);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    cursor: pointer;
 }
 .mode-btn {
     padding: 10px 20px;
@@ -314,6 +335,19 @@ header {
     padding: 20px;
     border-radius: 10px;
     border: 1px solid var(--calculator-border);
+}
+.expense-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+#sort-expenses {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--calculator-border);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
 }
 #expense-list {
     list-style: none;

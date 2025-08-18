@@ -13,6 +13,9 @@
                 <button id="calc-mode-btn" class="mode-btn active">Calculator</button>
                 <button id="expense-mode-btn" class="mode-btn">Expense Tracker</button>
             </div>
+        <div class="viewport-toggle">
+            <button id="viewport-btn">Toggle Mobile View</button>
+        </div>
         </header>
 
         <div id="calculator-view" class="view active">
@@ -94,7 +97,16 @@
                     </div>
                 </form>
                 <div class="expense-list-container">
+                <div class="expense-list-header">
                     <h2>Expenses</h2>
+                    <select id="sort-expenses">
+                        <option value="date-desc">Sort by Date (Newest)</option>
+                        <option value="date-asc">Sort by Date (Oldest)</option>
+                        <option value="amount-desc">Sort by Amount (High-Low)</option>
+                        <option value="amount-asc">Sort by Amount (Low-High)</option>
+                        <option value="category-asc">Sort by Category (A-Z)</option>
+                    </select>
+                </div>
                 <div class="filter-tabs">
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="yearly">This Year</button>
