@@ -40,7 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.addEventListener('change', () => { setTheme(themeToggle.checked); localStorage.setItem('theme', themeToggle.checked ? 'dark' : 'light'); });
 
     // --- VIEWPORT TOGGLE LOGIC ---
-    viewportBtn.addEventListener('click', () => { mainAppWrapper.classList.toggle('mobile-view'); });
+    viewportBtn.addEventListener('click', () => {
+        mainAppWrapper.classList.toggle('mobile-view');
+        if (mainAppWrapper.classList.contains('mobile-view')) {
+            viewportBtn.textContent = 'Toggle Desktop View';
+        } else {
+            viewportBtn.textContent = 'Toggle Mobile View';
+        }
+    });
 
     // --- MODE SWITCHING LOGIC ---
     calcModeBtn.addEventListener('click', () => { calculatorView.classList.add('active'); expenseTrackerView.classList.remove('active'); calcModeBtn.classList.add('active'); expenseModeBtn.classList.remove('active'); });

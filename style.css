@@ -59,7 +59,7 @@ body {
 }
 
 .calculator-wrapper { display: flex; flex-direction: column; align-items: center; }
-.theme-switcher { margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--btn-color); }
+.theme-switcher { display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--btn-color); }
 .toggle-label { position: relative; display: inline-block; width: 60px; height: 34px; }
 .toggle-label input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--slider-bg); transition: .4s; border-radius: 34px; }
@@ -77,7 +77,39 @@ input:checked + .slider:before { transform: translateX(26px); }
 .operator:hover { background-color: var(--operator-hover-bg); }
 .operator:active { background-color: var(--operator-active-bg); }
 
+.history-panel {
+    background-color: var(--calculator-bg);
+    border: 1px solid var(--calculator-border);
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    height: 520px; /* Match calculator height */
+    display: flex;
+    flex-direction: column;
+    color: var(--btn-color);
+}
+.history-panel h3 {
+    margin-top: 0;
+    text-align: center;
+    border-bottom: 1px solid var(--calculator-border);
+    padding-bottom: 10px;
+}
+#history-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+#history-list li {
+    padding: 8px 4px;
+    border-bottom: 1px solid var(--calculator-border);
+    font-size: 1.1em;
+    word-wrap: break-word;
+}
+
 header { background-color: var(--calculator-bg); padding: 10px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 100%; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+.controls-wrapper { display: flex; align-items: center; gap: 20px; }
 .mode-switcher { text-align: center; }
 #viewport-btn { padding: 5px 10px; border-radius: 5px; border: 1px solid var(--calculator-border); background-color: var(--btn-bg); color: var(--btn-color); cursor: pointer; }
 .mode-btn { padding: 10px 20px; font-size: 1.2em; cursor: pointer; border: 1px solid var(--calculator-border); background-color: var(--btn-bg); color: var(--btn-color); }
