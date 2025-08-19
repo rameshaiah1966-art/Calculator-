@@ -43,13 +43,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
+    padding: 20px;
     min-height: 100vh;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 .main-app-wrapper.mobile-view {
-    max-width: 375px;
-    height: 667px;
+    max-width: 390px; /* iPhone 12 Pro width */
+    height: 844px;
     border: 10px solid #333;
     border-radius: 20px;
     padding: 20px;
@@ -57,406 +58,69 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-.calculator-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+.calculator-wrapper { display: flex; flex-direction: column; align-items: center; }
+.theme-switcher { margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--btn-color); }
+.toggle-label { position: relative; display: inline-block; width: 60px; height: 34px; }
+.toggle-label input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--slider-bg); transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--operator-bg); }
+input:checked + .slider:before { transform: translateX(26px); }
 
-.theme-switcher {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: var(--btn-color);
-}
+.calculator { border: 1px solid var(--calculator-border); border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: var(--calculator-bg); width: 320px; }
+.display { background-color: var(--display-bg); color: var(--display-color); font-size: 2.5em; padding: 20px; text-align: right; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background-color: var(--calculator-border); padding: 1px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; overflow: hidden; }
+.btn { background-color: var(--btn-bg); color: var(--btn-color); border: none; padding: 20px; font-size: 1.5em; cursor: pointer; transition: background-color 0.2s; }
+.btn:hover { background-color: var(--btn-hover-bg); }
+.btn:active { background-color: var(--btn-active-bg); }
+.operator { background-color: var(--operator-bg); color: var(--operator-color); }
+.operator:hover { background-color: var(--operator-hover-bg); }
+.operator:active { background-color: var(--operator-active-bg); }
 
-.toggle-label {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
+header { background-color: var(--calculator-bg); padding: 10px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 100%; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+.mode-switcher { text-align: center; }
+#viewport-btn { padding: 5px 10px; border-radius: 5px; border: 1px solid var(--calculator-border); background-color: var(--btn-bg); color: var(--btn-color); cursor: pointer; }
+.mode-btn { padding: 10px 20px; font-size: 1.2em; cursor: pointer; border: 1px solid var(--calculator-border); background-color: var(--btn-bg); color: var(--btn-color); }
+.mode-btn.active { background-color: var(--operator-bg); color: var(--operator-color); }
+.mode-btn:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+.mode-btn:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
 
-.toggle-label input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+.view { display: none; width: 100%; }
+.view.active { display: block; }
+#calculator-view.active { display: flex; justify-content: center; }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--slider-bg);
-    transition: .4s;
-    border-radius: 34px;
-}
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
+.expense-container { display: flex; flex-direction: column; align-items: center; gap: 20px; color: var(--btn-color); width: 100%; max-width: 800px; }
+#expense-form { display: flex; flex-direction: row; gap: 10px; width: 100%; align-items: flex-end; }
+#expense-form input, #expense-form button, .autocomplete-wrapper { width: auto; flex-grow: 1; }
+.custom-date-controls { display: flex; flex-direction: column; gap: 5px; }
+#expense-form input { padding: 10px; border: 1px solid var(--calculator-border); border-radius: 5px; background-color: var(--btn-bg); color: var(--btn-color); }
+#add-expense-btn { padding: 10px 15px; border-radius: 5px; border: none; background-color: var(--operator-bg); color: var(--operator-color); cursor: pointer; flex-grow: 0; }
+.expense-list-container { width: 100%; background-color: var(--calculator-bg); padding: 20px; border-radius: 10px; border: 1px solid var(--calculator-border); box-sizing: border-box; }
+.expense-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+#sort-expenses { padding: 5px; border-radius: 5px; border: 1px solid var(--calculator-border); background-color: var(--btn-bg); color: var(--btn-color); }
+#expense-list { list-style: none; padding: 0; margin: 0; }
+#expense-list li { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--calculator-border); }
+.expense-item-left { display: flex; flex-direction: column; gap: 4px; }
+.expense-date { font-size: 0.8em; opacity: 0.7; }
+.expense-item-right { display: flex; align-items: center; gap: 10px; }
+.delete-btn { background: #ff4d4d; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; }
+#expense-list li span:first-child { font-weight: bold; }
+.hidden { display: none; }
 
-input:checked + .slider {
-    background-color: var(--operator-bg);
-}
+.autocomplete-wrapper { position: relative; display: inline-block; }
+.suggestions-container { display: none; position: absolute; border: 1px solid var(--calculator-border); border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: var(--calculator-bg); }
+.suggestions-container div { padding: 10px; cursor: pointer; border-bottom: 1px solid var(--calculator-border); }
+.suggestions-container div:hover { background-color: var(--btn-hover-bg); }
 
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.calculator {
-    border: 1px solid var(--calculator-border);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: var(--calculator-bg);
-    width: 320px;
-}
-
-.display {
-    background-color: var(--display-bg);
-    color: var(--display-color);
-    font-size: 2.5em;
-    padding: 20px;
-    text-align: right;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background-color: var(--calculator-border);
-    padding: 1px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    overflow: hidden;
-}
-
-.btn {
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-    border: none;
-    padding: 20px;
-    font-size: 1.5em;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn:hover {
-    background-color: var(--btn-hover-bg);
-}
-
-.btn:active {
-    background-color: var(--btn-active-bg);
-}
-
-.operator {
-    background-color: var(--operator-bg);
-    color: var(--operator-color);
-}
-
-.operator:hover {
-    background-color: var(--operator-hover-bg);
-}
-
-.operator:active {
-    background-color: var(--operator-active-bg);
-}
-
-.app-container {
-    display: flex;
-    gap: 40px;
-    align-items: flex-start;
-}
-
-.history-panel {
-    background-color: var(--calculator-bg);
-    border: 1px solid var(--calculator-border);
-    border-radius: 10px;
-    padding: 20px;
-    width: 250px;
-    height: 450px;
-    display: flex;
-    flex-direction: column;
-}
-
-.history-panel h3 {
-    color: var(--btn-color);
-    margin-top: 0;
-    text-align: center;
-    border-bottom: 1px solid var(--calculator-border);
-    padding-bottom: 10px;
-}
-
-#history-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-    overflow-y: auto;
-    color: var(--btn-color);
-}
-
-#history-list li {
-    padding: 8px 4px;
-    border-bottom: 1px solid var(--calculator-border);
-    font-size: 1.1em;
-    word-wrap: break-word;
-}
-
-#clear-history {
-    background-color: var(--operator-bg);
-    color: var(--operator-color);
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#clear-history:hover {
-    background-color: var(--operator-hover-bg);
-}
+.expense-summary-container { width: 100%; background-color: var(--calculator-bg); padding: 20px; border-radius: 10px; border: 1px solid var(--calculator-border); margin-top: 20px; box-sizing: border-box; }
+.expense-summary-container h3 { margin-top: 0; text-align: center; border-bottom: 1px solid var(--calculator-border); padding-bottom: 10px; }
+.summary-item { display: flex; justify-content: space-between; padding: 5px 0; }
+.summary-item.total { font-weight: bold; font-size: 1.2em; margin-top: 10px; border-top: 2px solid var(--btn-color); }
 
 @media (max-width: 768px) {
-    .app-container {
-        flex-direction: column;
-        align-items: center;
-    }
-    .history-panel {
-        width: 320px;
-        margin-top: 20px;
-        height: 200px;
-    }
-}
-
-/* --- HEADER & MODE SWITCHER --- */
-header {
-    background-color: var(--calculator-bg);
-    padding: 10px 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-}
-.mode-switcher {
-    text-align: center;
-}
-#viewport-btn {
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 1px solid var(--calculator-border);
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-    cursor: pointer;
-}
-.mode-btn {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    cursor: pointer;
-    border: 1px solid var(--calculator-border);
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-}
-.mode-btn.active {
-    background-color: var(--operator-bg);
-    color: var(--operator-color);
-}
-.mode-btn:first-child {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-.mode-btn:last-child {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-/* --- VIEW MANAGEMENT --- */
-.view {
-    display: none;
-}
-.view.active {
-    display: block;
-}
-
-/* --- EXPENSE TRACKER --- */
-.expense-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    color: var(--btn-color);
-}
-#expense-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.form-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-#expense-form input {
-    padding: 10px;
-    border: 1px solid var(--calculator-border);
-    border-radius: 5px;
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-}
-#expense-form button {
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: none;
-    background-color: var(--operator-bg);
-    color: var(--operator-color);
-    cursor: pointer;
-}
-.expense-list-container {
-    width: 400px;
-    background-color: var(--calculator-bg);
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid var(--calculator-border);
-}
-.expense-list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-#sort-expenses {
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid var(--calculator-border);
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-}
-#expense-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-#expense-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid var(--calculator-border);
-}
-.expense-item-left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.expense-date {
-    font-size: 0.8em;
-    opacity: 0.7;
-}
-.expense-item-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.delete-btn {
-    background: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.filter-tabs {
-    margin-bottom: 10px;
-    display: flex;
-    gap: 5px;
-}
-.filter-btn {
-    padding: 5px 10px;
-    border: 1px solid var(--calculator-border);
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
-    cursor: pointer;
-    border-radius: 5px;
-}
-.filter-btn.active {
-    background-color: var(--operator-bg);
-    color: var(--operator-color);
-}
-#expense-list li span:first-child {
-    font-weight: bold;
-}
-.hidden {
-    display: none;
-}
-
-/* --- AUTOCOMPLETE --- */
-.autocomplete-wrapper {
-    position: relative;
-    display: inline-block;
-}
-.suggestions-container {
-    display: none; /* Hidden by default */
-    position: absolute;
-    border: 1px solid var(--calculator-border);
-    border-top: none;
-    z-index: 99;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--calculator-bg);
-}
-.suggestions-container div {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid var(--calculator-border);
-}
-.suggestions-container div:hover {
-    background-color: var(--btn-hover-bg);
-}
-
-/* --- EXPENSE SUMMARY --- */
-.expense-summary-container {
-    width: 400px;
-    background-color: var(--calculator-bg);
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid var(--calculator-border);
-    margin-top: 20px;
-}
-.expense-summary-container h3 {
-    margin-top: 0;
-    text-align: center;
-    border-bottom: 1px solid var(--calculator-border);
-    padding-bottom: 10px;
-}
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-}
-.summary-item.total {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-top: 10px;
-    border-top: 2px solid var(--btn-color);
+    .app-container { flex-direction: column; align-items: center; }
+    .history-panel { width: 100%; max-width: 390px; margin-top: 20px; height: 200px; box-sizing: border-box; }
+    #expense-form { flex-direction: column; align-items: stretch; gap: 15px; }
+    .custom-date-controls { flex-direction: row; align-items: center; }
 }

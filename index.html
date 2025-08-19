@@ -13,9 +13,9 @@
                 <button id="calc-mode-btn" class="mode-btn active">Calculator</button>
                 <button id="expense-mode-btn" class="mode-btn">Expense Tracker</button>
             </div>
-        <div class="viewport-toggle">
-            <button id="viewport-btn">Toggle Mobile View</button>
-        </div>
+            <div class="viewport-toggle">
+                <button id="viewport-btn">Toggle Mobile View</button>
+            </div>
         </header>
 
         <div id="calculator-view" class="view active">
@@ -32,37 +32,8 @@
                     <div class="calculator">
                         <div class="display" id="display">0</div>
                         <div class="buttons">
-                            <!-- Scientific Rows -->
-                            <button class="btn operator" data-value="sin(">sin</button>
-                            <button class="btn operator" data-value="cos(">cos</button>
-                            <button class="btn operator" data-value="tan(">tan</button>
-                            <button class="btn operator" data-value="^">^</button>
-                            <button class="btn operator" data-value="log(">log</button>
-                            <button class="btn operator" data-value="ln(">ln</button>
-                            <button class="btn operator" data-value="exp(">exp</button>
-                            <button class="btn operator" data-value="Math.E">e</button>
-                            <!-- Top Row -->
-                            <button class="btn operator" data-value="(">(</button>
-                            <button class="btn operator" data-value=")">)</button>
-                            <button class="btn operator" data-value="DEL">DEL</button>
-                            <button class="btn operator" data-value="C">C</button>
-                            <!-- Numpad -->
-                            <button class="btn" data-value="7">7</button>
-                            <button class="btn" data-value="8">8</button>
-                            <button class="btn" data-value="9">9</button>
-                            <button class="btn operator" data-value="/">/</button>
-                            <button class="btn" data-value="4">4</button>
-                            <button class="btn" data-value="5">5</button>
-                            <button class="btn" data-value="6">6</button>
-                            <button class="btn operator" data-value="*">*</button>
-                            <button class="btn" data-value="1">1</button>
-                            <button class="btn" data-value="2">2</button>
-                            <button class="btn" data-value="3">3</button>
-                            <button class="btn operator" data-value="-">-</button>
-                            <button class="btn" data-value="0">0</button>
-                            <button class="btn" data-value=".">.</button>
-                            <button class="btn operator" data-value="=">=</button>
-                            <button class="btn operator" data-value="+">+</button>
+                            <!-- ... (calculator buttons are correct) ... -->
+                            <button class="btn operator" data-value="sin(">sin</button><button class="btn operator" data-value="cos(">cos</button><button class="btn operator" data-value="tan(">tan</button><button class="btn operator" data-value="^">^</button><button class="btn operator" data-value="log(">log</button><button class="btn operator" data-value="ln(">ln</button><button class="btn operator" data-value="exp(">exp</button><button class="btn operator" data-value="Math.E">e</button><button class="btn operator" data-value="(">(</button><button class="btn operator" data-value=")">)</button><button class="btn operator" data-value="DEL">DEL</button><button class="btn operator" data-value="C">C</button><button class="btn" data-value="7">7</button><button class="btn" data-value="8">8</button><button class="btn" data-value="9">9</button><button class="btn operator" data-value="/">/</button><button class="btn" data-value="4">4</button><button class="btn" data-value="5">5</button><button class="btn" data-value="6">6</button><button class="btn operator" data-value="*">*</button><button class="btn" data-value="1">1</button><button class="btn" data-value="2">2</button><button class="btn" data-value="3">3</button><button class="btn operator" data-value="-">-</button><button class="btn" data-value="0">0</button><button class="btn" data-value=".">.</button><button class="btn operator" data-value="=">=</button><button class="btn operator" data-value="+">+</button>
                         </div>
                     </div>
                 </div>
@@ -78,48 +49,40 @@
             <div class="expense-container">
                 <h2>Add New Expense</h2>
                 <form id="expense-form">
-                    <div class="form-row">
-                        <input type="text" id="expense-desc" placeholder="Expense Description" required>
-                        <input type="number" id="expense-amount" placeholder="Amount" required step="0.01">
-                        <div class="autocomplete-wrapper">
-                            <input type="text" id="expense-category" placeholder="Category" required autocomplete="off">
-                            <div id="category-suggestions" class="suggestions-container"></div>
-                        </div>
+                    <input type="text" id="expense-desc" placeholder="Expense Description" required>
+                    <input type="number" id="expense-amount" placeholder="Amount" required step="0.01">
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="expense-category" placeholder="Category" required autocomplete="off">
+                        <div id="category-suggestions" class="suggestions-container"></div>
                     </div>
-                    <div class="form-row">
+                    <div class="custom-date-controls">
                         <label class="custom-date-label">
                             <input type="checkbox" id="custom-date-checkbox"> Set custom date
                         </label>
                         <input type="datetime-local" id="expense-date" class="hidden">
                     </div>
-                    <div class="form-row">
-                        <button type="button" id="add-expense-btn">Add Expense</button>
-                    </div>
+                    <button type="button" id="add-expense-btn">Add Expense</button>
                 </form>
                 <div class="expense-list-container">
-                <div class="expense-list-header">
-                    <h2>Expenses</h2>
-                    <select id="sort-expenses">
-                        <option value="date-desc">Sort by Date (Newest)</option>
-                        <option value="date-asc">Sort by Date (Oldest)</option>
-                        <option value="amount-desc">Sort by Amount (High-Low)</option>
-                        <option value="amount-asc">Sort by Amount (Low-High)</option>
-                        <option value="category-asc">Sort by Category (A-Z)</option>
-                    </select>
+                    <div class="expense-list-header">
+                        <h2>Expenses</h2>
+                        <select id="sort-expenses">
+                            <option value="date-desc">Sort by Date (Newest)</option>
+                            <option value="date-asc">Sort by Date (Oldest)</option>
+                            <option value="amount-desc">Sort by Amount (High-Low)</option>
+                            <option value="amount-asc">Sort by Amount (Low-High)</option>
+                            <option value="category-asc">Sort by Category (A-Z)</option>
+                        </select>
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="yearly">This Year</button>
+                        <button class="filter-btn" data-filter="monthly">This Month</button>
+                        <button class="filter-btn" data-filter="weekly">This Week</button>
+                    </div>
+                    <ul id="expense-list"></ul>
                 </div>
-                <div class="filter-tabs">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="yearly">This Year</button>
-                    <button class="filter-btn" data-filter="monthly">This Month</button>
-                    <button class="filter-btn" data-filter="weekly">This Week</button>
-                </div>
-                    <ul id="expense-list">
-                        <!-- Expenses will be listed here -->
-                    </ul>
-                </div>
-                <div id="expense-summary" class="expense-summary-container">
-                    <!-- Summary will be rendered here -->
-                </div>
+                <div id="expense-summary" class="expense-summary-container"></div>
             </div>
         </div>
     </div>
